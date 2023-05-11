@@ -3,6 +3,41 @@
 #include <time.h> // used to get the time.
 #include <string.h>
 
+struct player {
+    char name[20];
+    int score;
+};
+
+/*
+ * Read the Scoreboard from the file and return it. The function has to return the pointer to the array.
+ */
+void printScoreBoard(){
+
+    struct player scoreBoard[2];
+    struct player Alice = { "Alice", 20};
+    scoreBoard[0] = Alice;
+    struct player Bob = { "Bob", 30};
+    scoreBoard[1] = Bob;
+
+    printf("%s: %i\n", scoreBoard[0].name, scoreBoard[0].score);
+}
+
+void printScoreBoard1(){
+    struct player entries[10];
+    FILE *scoreBoard;
+    scoreBoard = fopen("./score_board.csv", "r");
+    char line[256];
+    int anzZeilen = 0;
+    char name[20];
+    int score;
+
+    while (fgets(line, 256, scoreBoard) != NULL){
+        sscanf(line, "%[^,], %d", name, &score);
+        printf("%s:\t\t", name);
+        printf("%i\n", score);
+    }
+}
+
 /*
 Set a seed for the random number generator.
 */
@@ -40,6 +75,8 @@ int main(void){
     saltTheRNG();
     int playerWantsToPlay = 1;
     char answerToPlayWishQuestion[4];
+
+    printScoreBoard1();
 
     do {
         playGame();
