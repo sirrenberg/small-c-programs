@@ -163,4 +163,6 @@ int main(void){
         }
     } while(playerWantsToPlay);
     free(scoreboard);
+
+    return 0;
 }
