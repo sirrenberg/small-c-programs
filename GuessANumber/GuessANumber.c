@@ -3,15 +3,11 @@
 #include <time.h> // used to get the time.
 #include <string.h>
 #define SCOREBOARD_MAX_SIZE 10
-#define RANDOM_NUMBER_UPPER_BOUND 10
+#define RANDOM_NUMBER_UPPER_BOUND 100
 
 struct player {
     char name[20];
     int score;
-};
-
-struct scoreboard{
-    struct player entries[10];
 };
 
 /*
@@ -153,11 +149,8 @@ int main(void){
                 int current_score = playGame(upper_bound);
                 int position = position_in_scoreboard(scoreboard, size_of_scoreboard, current_score);
 
-                //TEST
-                printf("%s %i", "Position in scoreboard is:", position);
-
                 if (position > -1){
-                    printf("%s\n", "Congratulations, you reached a new highscore.");
+                    printf("%s %i %s\n", "Congratulations, you are position", position + 1, "on the scoreboard.");
                     printf("%s", "Please enter your name: ");
                     char name[20]; 
                     fscanf(stdin, "%s", name);
