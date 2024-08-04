@@ -1,10 +1,11 @@
 #include <stddef.h> // for size_t
 #include <stdio.h>
+#include "structures.h"
 
 /**
  * Print the input file as ASCII Values, as Hex Values and the count of each Byte value.
  */
-void visualize_file(char *mapped_file, size_t file_size, long long *freq, int freq_size){
+void visualize_file(char *mapped_file, size_t file_size, freq_pair *freq, int freq_size){
     printf("%s", "ASCII Values: ");
 
     for (size_t i = 0; i < file_size; ++i) {
@@ -23,6 +24,6 @@ void visualize_file(char *mapped_file, size_t file_size, long long *freq, int fr
         if (!(i % 16)){
             putchar('\n');
         }
-        printf("0x%02x: %2lld  ", i, freq[i]);
+        printf("0x%02x: %2lld  ", freq[i].c, freq[i].freq);
     }
 }
