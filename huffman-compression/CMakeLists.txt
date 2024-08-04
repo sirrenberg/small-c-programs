@@ -4,4 +4,4 @@ project(HuffmanEncoding C)
 set(CMAKE_C_STANDARD 99)
 
 # Add the executable
-add_executable(HuffmanEncoding huffman.c mmap_utils.c)
+add_executable(HuffmanEncoding huffman.c mmap_utils.c visualization_utils.c)

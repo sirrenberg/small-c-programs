@@ -35,8 +35,8 @@ char *map_file(const char *filename, size_t *file_size) {
 }
 
 // Function to unmap the file
-void unmap_file(char *mapped_file, size_t *file_size) {
-    if (munmap(mapped_file, *file_size) == -1) {
+void unmap_file(char *mapped_file, size_t file_size) {
+    if (munmap(mapped_file, file_size) == -1) {
         perror("Failed to munmap file");
     }
 }
