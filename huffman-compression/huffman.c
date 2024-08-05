@@ -14,6 +14,25 @@ int compare_freq(const void *a, const void *b) {
     return fb->freq - fa->freq; // Descending order, three way comparison.
 }
 
+typedef struct huffman_tree{
+    char value;
+    struct huffman_tree *left;
+    struct huffman_tree *right;
+} huffman_tree;
+
+void free_huffman_tree(huffman_tree *node) {
+    if (node == NULL) {
+        return;
+    }
+    
+    // Recursively free the left and right subtrees
+    free_huffman_tree(node->left);
+    free_huffman_tree(node->right);
+    
+    // Free the current node
+    free(node);
+}
+
 int main(int argc, char *argv[]) {
     if (argc < 2) {
         fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
@@ -51,24 +70,56 @@ int main(int argc, char *argv[]) {
 
     // TODO: create binary tree in array to keep locality and avoid pointer chasing
 
-    typedef struct huffman_tree{
-        char value;
-        struct huffman_tree *left;
-        struct huffman_tree *right;
-    } huffman_tree;
 
-    huffman_tree *ht0 = (huffman_tree *)malloc(sizeof(huffman_tree));
-    *ht0 = (huffman_tree) {.value = 'B', .left = NULL, .right = NULL};
 
-    huffman_tree *ht1 = (huffman_tree *)malloc(sizeof(huffman_tree));
-    *ht1 = (huffman_tree) {.value = 'C', .left = NULL, .right = NULL};
+    // huffman_tree *ht0 = (huffman_tree *)malloc(sizeof(huffman_tree));
+    // *ht0 = (huffman_tree) {.value = 'B', .left = NULL, .right = NULL};
 
-    huffman_tree *ht2 = (huffman_tree *)malloc(sizeof(huffman_tree));
-    *ht2 = (huffman_tree) {.value = 'A', .left = ht0, .right = ht1};
+    // huffman_tree *ht1 = (huffman_tree *)malloc(sizeof(huffman_tree));
+    // *ht1 = (huffman_tree) {.value = 'C', .left = NULL, .right = NULL};
 
-    free(ht0);
-    free(ht1);
-    free(ht2);
+    // huffman_tree *ht2 = (huffman_tree *)malloc(sizeof(huffman_tree));
+    // *ht2 = (huffman_tree) {.value = 'A', .left = ht0, .right = ht1};
+
+    // free(ht0);
+    // free(ht1);
+    // free(ht2);
+
+    huffman_tree *leaf_right = (huffman_tree *)malloc(sizeof(huffman_tree));
+    *leaf_right = (huffman_tree) {.value = freq[freq_size - 1].c, .left = NULL, .right = NULL};
+
+    huffman_tree *leaf_left = (huffman_tree *)malloc(sizeof(huffman_tree));
+    *leaf_left = (huffman_tree) {.value = freq[freq_size - 2].c, .left = NULL, .right = NULL};
+
+    huffman_tree *ht = (huffman_tree *)malloc(sizeof(huffman_tree));
+    *ht = (huffman_tree) {.value = '0', .left = leaf_left, .right = leaf_right}; // the value inside the ht is not important.
+
+    long long f = freq[freq_size - 1].freq + freq[freq_size - 2].freq;
+
+    freq_size -= 2;
+    for(int i = freq_size - 1; i >= 0; --i){
+        printf("\n%lld",f);
+        huffman_tree *inner = (huffman_tree *)malloc(sizeof(huffman_tree));
+        huffman_tree *leaf = (huffman_tree *)malloc(sizeof(huffman_tree));
+        *leaf = (huffman_tree) {.value = freq[i].c, .left = NULL, .right = NULL};
+        if (freq[i].freq >= f){
+            *inner = (huffman_tree) {.value = '0', .left = leaf, .right = ht};
+            printf("%s","left");
+        }
+        else{
+            *inner = (huffman_tree) {.value = '0', .left = ht, .right = leaf};
+            printf("%s","right");
+        }
+        ht = inner;
+        f += freq[i].freq;
+    }
+
+    printf("\n0x%02x\n", ht->right->value);
+    printf("0x%02x\n", ht->left->left->value);
+    printf("0x%02x\n", ht->left->right->left->value);
+    printf("0x%02x\n", ht->left->right->right->value);
+
+    free_huffman_tree(ht);
 
     // Unmap the file
     unmap_file(mapped_file, file_size);
