@@ -4,6 +4,6 @@
 #include <stddef.h> // for size_t
 #include "structures.h"
 
-void visualize_file(char *mapped_file, size_t file_size, freq_pair *freq, int freq_size);
+void visualize_file(char *mapped_file, size_t file_size, FreqPair *freq, int freq_size);
 
 #endif // VISUALIZATION_UTILS_H

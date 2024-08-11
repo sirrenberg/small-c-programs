@@ -5,7 +5,7 @@
 /**
  * Print the input file as ASCII Values, as Hex Values and the count of each Byte value.
  */
-void visualize_file(char *mapped_file, size_t file_size, freq_pair *freq, int freq_size){
+void visualize_file(char *mapped_file, size_t file_size, FreqPair *freq, int freq_size){
     printf("%s", "ASCII Values: ");
 
     for (size_t i = 0; i < file_size; ++i) {

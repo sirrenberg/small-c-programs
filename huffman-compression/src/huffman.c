@@ -8,10 +8,19 @@
 #include "visualization_utils.h"
 #include "structures.h"
 
+int int_cmp(const void *a, const void *b){
+    int ia = *(const int *) a;
+    int ib = *(const int *) b;
+    return ia - ib;
+}
+
+/**
+ * Three-way comparison function between two values a and b.
+ */
 int compare_freq(const void *a, const void *b) {
-    freq_pair *fa = (freq_pair *)a;
-    freq_pair *fb = (freq_pair *)b;
-    return fb->freq - fa->freq; // Descending order, three way comparison.
+    FreqPair *fa = (FreqPair *)a;
+    FreqPair *fb = (FreqPair *)b;
+    return fb->freq - fa->freq; // Descending order
 }
 
 typedef struct huffman_tree{
@@ -20,6 +29,9 @@ typedef struct huffman_tree{
     struct huffman_tree *right;
 } huffman_tree;
 
+/**
+ * Free all nodes of the huffman tree.
+ */
 void free_huffman_tree(huffman_tree *node) {
     if (node == NULL) {
         return;
@@ -34,12 +46,13 @@ void free_huffman_tree(huffman_tree *node) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
+    // if (argc < 2) {
+    //     fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
+    //     return EXIT_FAILURE;
+    // }
 
-    const char *filename = argv[1];
+    // const char *filename = argv[1];
+    const char *filename = "../example.txt";
     size_t file_size;
 
     // Map the file that should be compressed into the memory
@@ -49,7 +62,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    freq_pair freq[256] = {{0,0}}; // use a hashmap to keep track of the frequency of each byte. Hash function: Identity. Works well because we know the value to be bounded.
+    FreqPair freq[256] = {{0,0}}; // use a hashmap to keep track of the frequency of each byte. Hash function: Identity. Works well because we know the value to be bounded.
     int freq_size = 256;
 
     for (size_t i = 0; i < file_size; ++i){
@@ -57,14 +70,8 @@ int main(int argc, char *argv[]) {
         freq[mapped_file[i]].c = (char) mapped_file[i];
     }
 
-    qsort(freq, freq_size, sizeof(freq_pair), compare_freq);
-
-    for(int i = 0; i < freq_size; ++i){
-        if (freq[i].freq == 0){
-            freq_size = i;
-            break;
-        }
-    }
+    // Create tree nodes for every byte and add them to a priority queue. Let's use a heap.
+    qsort(freq, freq_size, sizeof(FreqPair), compare_freq);
 
     visualize_file(mapped_file, file_size, freq, freq_size);
 
@@ -118,10 +125,22 @@ int main(int argc, char *argv[]) {
     printf("0x%02x\n", ht->left->left->value);
     printf("0x%02x\n", ht->left->right->left->value);
     printf("0x%02x\n", ht->left->right->right->value);
+    
 
     free_huffman_tree(ht);
 
     // Unmap the file
     unmap_file(mapped_file, file_size);
+
+    // test heap implementation.
+    int t[10] = {9,2,17,3,5,1};
+    size_t heap_size = 6;
+    make_heap(t, heap_size, sizeof(int), int_cmp);
+    for(int i = 0; i < heap_size; ++i){
+         printf("%d, ", t[i]);
+    }
+    printf("%s", "\n");
+
+
     return EXIT_SUCCESS;
 }
