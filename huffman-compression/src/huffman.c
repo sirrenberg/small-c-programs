@@ -8,12 +8,6 @@
 #include "visualization_utils.h"
 #include "structures.h"
 
-int int_cmp(const void *a, const void *b){
-    int ia = *(const int *) a;
-    int ib = *(const int *) b;
-    return ia - ib;
-}
-
 /**
  * Three-way comparison function between two values a and b.
  */
@@ -131,16 +125,6 @@ int main(int argc, char *argv[]) {
 
     // Unmap the file
     unmap_file(mapped_file, file_size);
-
-    // test heap implementation.
-    int t[10] = {9,2,17,3,5,1};
-    size_t heap_size = 6;
-    make_heap(t, heap_size, sizeof(int), int_cmp);
-    for(int i = 0; i < heap_size; ++i){
-         printf("%d, ", t[i]);
-    }
-    printf("%s", "\n");
-
 
     return EXIT_SUCCESS;
 }
