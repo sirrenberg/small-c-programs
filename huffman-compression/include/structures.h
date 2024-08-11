@@ -23,4 +23,11 @@ void make_heap(void *arr, size_t arr_size, size_t elem_size, compare_func cmp);
  */
 void pop_heap(void *arr, size_t arr_size, size_t elem_size, compare_func cmp);
 
+/**
+ * After inserting a value to the end of the array, you can use this function to sift the new value up.
+ * This is more efficient than just calling make_heap again.
+ * A precondition is, that arr[0] to arr[index - 1] is a heap, and arr[index] is the new value.
+ */
+void push_heap(void *arr, size_t index, size_t elem_size, compare_func cmp);
+
 #endif // STRUCTURES_H

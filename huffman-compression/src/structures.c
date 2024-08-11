@@ -53,3 +53,11 @@ void pop_heap(void *arr, size_t arr_size, size_t elem_size, compare_func cmp){
     swap(arr, 0, arr_size - 1, elem_size);
     heapify(arr, arr_size - 1 , 0 , elem_size, cmp);
 }
+
+void push_heap(void *arr, size_t index, size_t elem_size, compare_func cmp){
+    size_t parent = (index - 1) / 2;
+    if (index > 0 && cmp((char *)arr + index * elem_size, (char *)arr + parent * elem_size) > 0){
+        swap(arr, parent, index, elem_size);
+        push_heap(arr, parent, elem_size, cmp);
+    }
+}
